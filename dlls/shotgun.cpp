@@ -39,7 +39,9 @@ enum shotgun_e {
 	SHOTGUN_IDLE_DEEP
 };
 
+
 LINK_ENTITY_TO_CLASS(weapon_shotgun, CShotgun);
+
 
 void CShotgun::Spawn()
 {
@@ -79,6 +81,7 @@ void CShotgun::Precache(void)
 	m_usDoubleFire = PRECACHE_EVENT(1, "events/shotgun2.sc");
 }
 
+
 int CShotgun::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
@@ -110,11 +113,11 @@ int CShotgun::GetItemInfo(ItemInfo* p)
 }
 
 
-
 BOOL CShotgun::Deploy()
 {
 	return DefaultDeploy("models/v_shotgun.mdl", "models/p_shotgun.mdl", SHOTGUN_DRAW, "shotgun");
 }
+
 
 void CShotgun::PrimaryAttack()
 {
@@ -126,9 +129,6 @@ void CShotgun::PrimaryAttack()
 		return;
 	}
 
-	if (m_iClip <= 0) {
-		m_iClip = SHOTGUN_MAX_CLIP;
-	}
 
 	if (m_iClip <= 0)
 	{
@@ -142,6 +142,7 @@ void CShotgun::PrimaryAttack()
 	m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
 	m_iClip--;
+	m_iClip++;
 
 
 
@@ -223,9 +224,6 @@ void CShotgun::SecondaryAttack(void)
 		return;
 	}
 
-	if (m_iClip <= 1) {
-		m_iClip = SHOTGUN_MAX_CLIP;
-	}
 
 	if (m_iClip <= 1)
 	{
@@ -238,6 +236,7 @@ void CShotgun::SecondaryAttack(void)
 	m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
 	m_iClip -= 2;
+	m_iClip += 2;
 
 	int flags;
 #if defined( CLIENT_WEAPONS )
@@ -264,7 +263,7 @@ void CShotgun::SecondaryAttack(void)
 	{
 		// tuned for deathmatch
 		vecDir = m_pPlayer->FireBulletsPlayer(8, vecSrc, vecAiming, VECTOR_CONE_DM_DOUBLESHOTGUN, 2048, BULLET_PLAYER_BUCKSHOT, 0, 0, m_pPlayer->pev, m_pPlayer->random_seed);
-	}
+}
 	else
 	{
 		// untouched default single player
