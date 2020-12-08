@@ -1156,13 +1156,16 @@ public:
 
 };
 
+
 LINK_ENTITY_TO_CLASS(monster_sentry, CSentry);
+
 
 void CSentry::Precache()
 {
 	CBaseTurret::Precache();
 	PRECACHE_MODEL("models/sentry.mdl");
 }
+
 
 void CSentry::Spawn()
 {
@@ -1184,6 +1187,7 @@ void CSentry::Spawn()
 	SetThink(&CSentry::Initialize);
 	pev->nextthink = gpGlobals->time + 0.3;
 }
+
 
 void CSentry::Shoot(Vector& vecSrc, Vector& vecDirToEnemy)
 {
