@@ -13,6 +13,7 @@
 *
 ****/
 
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -20,6 +21,7 @@
 #include "weapons.h"
 #include "nodes.h"
 #include "player.h"
+
 
 enum glock_e {
 	GLOCK_IDLE1 = 0,
@@ -33,6 +35,7 @@ enum glock_e {
 	GLOCK_HOLSTER,
 	GLOCK_ADD_SILENCER
 };
+
 
 LINK_ENTITY_TO_CLASS(weapon_glock, CGlock);
 LINK_ENTITY_TO_CLASS(weapon_9mmhandgun, CGlock);
@@ -70,6 +73,7 @@ void CGlock::Precache(void)
 	m_usFireGlock2 = PRECACHE_EVENT(1, "events/glock2.sc");
 }
 
+
 int CGlock::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
@@ -87,24 +91,30 @@ int CGlock::GetItemInfo(ItemInfo* p)
 	return 1;
 }
 
+
 BOOL CGlock::Deploy()
 {
 	// pev->body = 1;
 	return DefaultDeploy("models/v_9mmhandgun.mdl", "models/p_9mmhandgun.mdl", GLOCK_DRAW, "onehanded", /*UseDecrement() ? 1 : 0*/ 0);
 }
 
+
 void CGlock::SecondaryAttack(void)
 {
-	GlockFire(0.1, 0.1, FALSE);
+	GlockFire(0.005, 0.1, FALSE);
 }
+
 
 void CGlock::PrimaryAttack(void)
 {
-	GlockFire(0.01, 0.3, TRUE);
-	CGrenade::ShootContact(m_pPlayer->pev,
+	GlockFire(0.01, 0.2, TRUE);
+	CGrenade::ShootContact(
+		m_pPlayer->pev,
 		m_pPlayer->pev->origin + m_pPlayer->pev->view_ofs + gpGlobals->v_forward * 16,
-		gpGlobals->v_forward * 800);
+		gpGlobals->v_forward * 1200
+	);
 }
+
 
 void CGlock::GlockFire(float flSpread, float flCycleTime, BOOL fUseAutoAim)
 {
