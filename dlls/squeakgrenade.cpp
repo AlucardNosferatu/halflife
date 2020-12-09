@@ -449,7 +449,8 @@ void CSqueak::Precache(void)
 	PRECACHE_SOUND("squeek/sqk_hunt2.wav");
 	PRECACHE_SOUND("squeek/sqk_hunt3.wav");
 	UTIL_PrecacheOther("monster_snark");
-
+	UTIL_PrecacheOther("monster_barney");
+	UTIL_PrecacheOther("monster_human_grunt");
 	m_usSnarkFire = PRECACHE_EVENT(1, "events/snarkfire.sc");
 }
 
@@ -539,8 +540,24 @@ void CSqueak::PrimaryAttack()
 			m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
 #ifndef CLIENT_DLL
-			CBaseEntity* pSqueak = CBaseEntity::Create("monster_snark", tr.vecEndPos, m_pPlayer->pev->v_angle, m_pPlayer->edict());
+			char* spawn_ally = "";
+			int current_ammo = m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType];
+			if (
+				current_ammo == 12 ||
+				current_ammo == 11 ||
+				current_ammo == 7 ||
+				current_ammo == 6 ||
+				current_ammo == 2 ||
+				current_ammo == 1
+				) {
+				spawn_ally = "monster_human_grunt";
+			}
+			else {
+				spawn_ally = "monster_barney";
+			}
+			CBaseEntity* pSqueak = CBaseEntity::Create(spawn_ally, tr.vecEndPos, m_pPlayer->pev->v_angle, m_pPlayer->edict());
 			pSqueak->pev->velocity = gpGlobals->v_forward * 200 + m_pPlayer->pev->velocity;
+
 #endif
 
 			// play hunt sound
@@ -554,6 +571,10 @@ void CSqueak::PrimaryAttack()
 			m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
 
 			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+
+			if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0) {
+				m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = SNARK_MAX_CARRY;
+			}
 
 			m_fJustThrown = 1;
 
